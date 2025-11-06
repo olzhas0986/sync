@@ -3,12 +3,12 @@
 # - Example script to sync updates to the minimal build system and OrangeFox sources
 # - There is very little error checking 
 # - Author:  DarthJabba9
-# - Version: generic:007
-# - Date:    23 March 2025
+# - Version: generic:008
+# - Date:    06 November 2025
 # ***************************************************************************************
 
 # the version number of this script
-SCRIPT_VERSION="20250321";
+SCRIPT_VERSION="20251106";
 
 # Our starting point (Fox base dir)
 BASE_DIR="$PWD";
@@ -84,6 +84,7 @@ Process_CMD_Line() {
 DoUpdate() {
 local recovery=$MANIFEST_DIR/bootable/recovery;
 local vendor=$MANIFEST_DIR/vendor/recovery;
+local se_omapi=$MANIFEST_DIR/external/se_omapi;
 
   if [ ! -d "$recovery" ]; then
      abort "- Invalid recovery directory: \"$recovery\". Quitting.";
@@ -102,7 +103,12 @@ local vendor=$MANIFEST_DIR/vendor/recovery;
   # vendor tree
   echo "- Updating the OrangeFox vendor tree ...";
   cd $vendor && git pull;
-  
+
+  # se_omapi
+  if [ -d $se_omapi ]; then
+	cd $se_omapi && git pull;
+  fi
+
   # finish
   echo "- Finished.";
   cd $BASE_DIR;
